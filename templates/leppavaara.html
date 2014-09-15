@@ -1,0 +1,24 @@
+<html>
+  <head>
+    <meta charset="utf-8"> 
+    <link href="/static/css/style_busdisplay.css" rel="stylesheet">
+    <title>Bussit Leppävaarasta</title>
+  </head>
+<body>
+<h1>{{ stop_name }}, seuraavat lähdöt</h1>
+<h2>Kehä 1 länteen</h2>
+<p>Linja Lähtöaika</p>
+<ul>
+{% for d in departures_1w %}
+  <li> {{ '{0} {1}'.format(d["code"],d["time"]) }} </li>
+{% endfor %}
+</ul>
+<h2>Kehä 1 itään</h2>
+<p>Linja Lähtöaika</p>
+<ul>
+{% for d in departures_1e %}
+  <li> {{d["code"]}} {{d["time"]}} </li>
+{% endfor %}
+</ul>
+</body>
+</html>

@@ -1,0 +1,13 @@
+<html>
+  <head>
+    <meta charset="utf-8"> 
+    <link href="/static/css/style_busdisplay.css" rel="stylesheet">
+    <title>Buses from Leppävaara</title>
+  </head>
+<body>
+Buses from {{ stop_name }}
+<ul>
+{% for d in departures %}
+  <li> {{ d["destination"] }} {{d["time"]}} </li>
+</body>
+</html>

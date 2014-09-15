@@ -1,0 +1,39 @@
+<html>
+  <head>
+    <meta charset="utf-8"> 
+    <link href="/static/css/style.css" rel="stylesheet">
+     <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+     <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+     <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+      <script>
+	$(function() {
+	  $( "#accordion" ).accordion({
+	    collapsible: true
+	  });
+	});
+</script>
+    <title> Ruokalista</title>
+  </head>
+<body>
+{{infotext}}
+<div id="accordion">
+{% for recipe in recipes %}
+  <h3> {{ recipe.name }} </h3> 
+  <div> 
+    <p> Linkki: <a href="{{recipe.url}}"> {{recipe.url}}</a></p> 
+    <p> Vaikeus: {{recipe.difficulty}} </p><p>Kuvaus:</p><p>{{recipe.description}}</p>
+  </div>
+{% endfor %}
+</div>
+<br>
+<p2> Uusi resepti</p2>
+  <form method="post" action=".">
+          <input type="text" name="name" /> Nimi<br>
+	  <input type="text" name="url" /> URL<br>
+	  <input type="text" name="diff" /> Vaikeus (esim. helppo, työläs, keskivaikea)<br><br>
+	  Kuvaus: (Voit esim. kopioida reseptin tähän, tai lisätä omia huomioita.)<br>
+	  <textarea rows="10" cols="30" name="desc"> </textarea>
+      <button type="submit">Lisää</button>
+   </form>
+</body>
+</html>

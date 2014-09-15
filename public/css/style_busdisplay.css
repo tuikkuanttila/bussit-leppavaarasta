@@ -1,0 +1,12 @@
+   body {
+     background-color: #CFE3DE;
+     font-family:"courier"; 
+     color: #29305C;
+     
+   }
+
+   ul {
+	font-size: 200%;
+	list-style-type: none;
+	padding:0; margin:0;
+	}
