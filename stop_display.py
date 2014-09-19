@@ -22,6 +22,18 @@ class BusDisplay(object):
         mins = ostr[2:]
         return hours + ":" + mins
 
+    def get_departures(self,urlbase,stop_code):
+        url = urlbase + stop_code
+        json_data = urllib.request.urlopen(url).read()
+        data = json.loads(json_data.decode())
+        departures = data[0]["departures"]
+
+        for d in departures:
+            d["code"] = self.format_bus_number(d["code"])
+            d["time"] = self.format_time(d["time"])
+
+        return departures
+
     @cherrypy.expose
     def leppavaara(self):
         name = "Leppävaara"
@@ -29,27 +41,13 @@ class BusDisplay(object):
         
         urlbase = "http://api.reittiopas.fi/hsl/prod/?user=tuikkuanttila&pass=a7eyQrrio&request=stop&code="
         code = "2112261" # Kehä 1 länteen
-        url = urlbase + code
-        json_data = urllib.request.urlopen(url).read()
-        data = json.loads(json_data.decode())
-        departures_1w = data[0]["departures"]
-
-        for d in departures_1w:
-            d["code"] = self.format_bus_number(d["code"])
-            d["time"] = self.format_time(d["time"])
+        departures_keha1_w = self.get_departures(urlbase,code)
 
         code = "2112262"
-        url = urlbase + code
-        json_data = urllib.request.urlopen(url).read()
-        data = json.loads(json_data.decode())
-        departures_1e = data[0]["departures"]
+        departures_keha1_e = self.get_departures(urlbase,code)
 
-        for d in departures_1e:
-            d["code"] = self.format_bus_number(d["code"])
-            d["time"] = self.format_time(d["time"])
-        
         template = env.get_template('leppavaara.html')
-        return template.render(stop_name=name,departures_1w=departures_1w,departures_1e=departures_1e)
+        return template.render(stop_name=name,departures_1w=departures_keha1_w,departures_1e=departures_keha1_e)
         
     
 if __name__ == '__main__':
