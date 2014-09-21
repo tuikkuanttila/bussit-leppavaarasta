@@ -4,10 +4,8 @@ import os
 import json
 import urllib
 from jinja2 import Environment,FileSystemLoader
-
+from settings import user,passkey
 env = Environment(loader=FileSystemLoader('templates'))
-user = "tuikkuanttila"
-passkey = "a7eyQrrio" 
 
 class BusDisplay(object):
     
@@ -27,27 +25,60 @@ class BusDisplay(object):
         json_data = urllib.request.urlopen(url).read()
         data = json.loads(json_data.decode())
         departures = data[0]["departures"]
-
-        for d in departures:
-            d["code"] = self.format_bus_number(d["code"])
-            d["time"] = self.format_time(d["time"])
+        
+        if departures:
+            for d in departures:
+                d["code"] = self.format_bus_number(d["code"])
+                d["time"] = self.format_time(d["time"])
 
         return departures
-
+    
     @cherrypy.expose
     def leppavaara(self):
         name = "Leppävaara"
         departures = []
         
-        urlbase = "http://api.reittiopas.fi/hsl/prod/?user=tuikkuanttila&pass=a7eyQrrio&request=stop&code="
-        code = "2112261" # Kehä 1 länteen
-        departures_keha1_w = self.get_departures(urlbase,code)
+        urlbase = "http://api.reittiopas.fi/hsl/prod/?user=" + user + "&pass=" + passkey + "&request=stop&code="
 
+        code = "2112261" # Kehä 1 länteen
+        stops = []
+        stop_1 = {}
+        stop_1["departures"] = self.get_departures(urlbase,code)
+        stop_1["stop_name"] = "Kehä 1 länteen (Otaniemen suunta)"
+        stops.append(stop_1)
+        
         code = "2112262"
-        departures_keha1_e = self.get_departures(urlbase,code)
+        stop_2 = {}
+        stop_2["departures"] = self.get_departures(urlbase,code)
+        stop_2["stop_name"] = "Kehä 1 itään"
+        stops.append(stop_2)
+
+        code = "2111209"
+        stop_3 = {}
+        stop_3["departures"] = self.get_departures(urlbase,code)
+        stop_3["stop_name"] = "Vanhaa Turuntietä Espoon suuntaan"
+        stops.append(stop_3)
+
+        code = "2111230"
+        stop_4 = {}
+        stop_4["departures"] = self.get_departures(urlbase,code)
+        stop_4["stop_name"] = "Työmatkapysäkki"
+        stops.append(stop_4)
+
+        code = "2111222"
+        stop_5 = {}
+        stop_5["departures"] = self.get_departures(urlbase,code)
+        stop_5["stop_name"] = "Karakallion suuntaan (20,26 ym)"
+        stops.append(stop_5)
+
+        code2 = "2111224"
+        stop_5 = {}
+        stop_5["departures"] = self.get_departures(urlbase,code2)
+        stop_5["stop_name"] = "Karakallion suuntaan (24 ym)"
+        stops.append(stop_5)
 
         template = env.get_template('leppavaara.html')
-        return template.render(stop_name=name,departures_1w=departures_keha1_w,departures_1e=departures_keha1_e)
+        return template.render(stops=stops)
         
     
 if __name__ == '__main__':
@@ -61,8 +92,6 @@ if __name__ == '__main__':
               }
               }
 
-    #cherrypy.server.socket_host = '192.168.0.147'
-    #cherrypy.server.socket_port = 8080
     cherrypy.config.update({'server.socket_host':'0.0.0.0'})
     cherrypy.tree.mount(BusDisplay(), '/', conf)
     cherrypy.engine.start()

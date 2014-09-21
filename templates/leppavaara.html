@@ -5,20 +5,26 @@
     <title>Bussit Leppävaarasta</title>
   </head>
 <body>
-<h1>{{ stop_name }}, seuraavat lähdöt</h1>
-<h2>Kehä 1 länteen</h2>
+<h1>Leppävaara, seuraavat lähdöt</h1>
+{% for stop in stops %}
+<h2> {{stop["stop_name"]}}</h2>
+{% if stop["departures"] %}
 <p>Linja Lähtöaika</p>
 <ul>
-{% for d in departures_1w %}
-  <li> {{ '{0} {1}'.format(d["code"],d["time"]) }} </li>
+{% for d in stop["departures"] %}
+  <li> {{ '{0} {1}'.format(d["code"],d["time"])}} </li>
 {% endfor %}
 </ul>
-<h2>Kehä 1 itään</h2>
+{% else %}
+<p>Ei lähtöjä seuraavaan tuntiin</p>
+{% endif %}
+{% endfor %}
+<!--<h2>Kehä 1 itään</h2>
 <p>Linja Lähtöaika</p>
 <ul>
 {% for d in departures_1e %}
   <li> {{d["code"]}} {{d["time"]}} </li>
 {% endfor %}
-</ul>
+</ul> -->
 </body>
 </html>
