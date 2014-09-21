@@ -46,18 +46,6 @@ class BusDisplay(object):
         stop_1["departures"] = self.get_departures(urlbase,code)
         stop_1["stop_name"] = "Kehä 1 länteen (Otaniemen suunta)"
         stops.append(stop_1)
-        
-        code = "2112262"
-        stop_2 = {}
-        stop_2["departures"] = self.get_departures(urlbase,code)
-        stop_2["stop_name"] = "Kehä 1 itään"
-        stops.append(stop_2)
-
-        code = "2111209"
-        stop_3 = {}
-        stop_3["departures"] = self.get_departures(urlbase,code)
-        stop_3["stop_name"] = "Vanhaa Turuntietä Espoon suuntaan"
-        stops.append(stop_3)
 
         code = "2111230"
         stop_4 = {}
@@ -76,6 +64,19 @@ class BusDisplay(object):
         stop_5["departures"] = self.get_departures(urlbase,code2)
         stop_5["stop_name"] = "Karakallion suuntaan (24 ym)"
         stops.append(stop_5)
+
+        code = "2111209"
+        stop_3 = {}
+        stop_3["departures"] = self.get_departures(urlbase,code)
+        stop_3["stop_name"] = "Vanhaa Turuntietä Espoon suuntaan"
+        stops.append(stop_3)
+
+        code = "2112262"
+        stop_2 = {}
+        stop_2["departures"] = self.get_departures(urlbase,code)
+        stop_2["stop_name"] = "Kehä 1 itään"
+        stops.append(stop_2)
+
 
         template = env.get_template('leppavaara.html')
         return template.render(stops=stops)
